@@ -1,11 +1,12 @@
 #include "vlasov_simulator.h"
+#include "utils/Timer.h"
 #include <vector>
 #include <iostream>
 #include <string>
 #include <cmath>
 int main(){
     std::cout<<"helloworld"<<"\n"<<std::flush;
-    std::string name_of_scheme="MUSCL";
+    std::string name_of_scheme="Lax-Wendroff";
     /************initial state of f**************
      *                                          *
      *                                          *
@@ -26,6 +27,8 @@ int main(){
     double grid_size_x=0.1;
     double grid_size_t=0.1;
     double v          =0.15;
+    Timer timer;
+    timer.start();
     std::vector<double> initial_state(length);
     
     for(int i=0;i<x1;i++){
@@ -45,14 +48,19 @@ int main(){
         initial_state[i]=H*std::sin(20.*(double)i/(double)length);
     }
     //初期波形の設定　終了
-
+    
     VlasovSimulator simulator(initial_state,
         v,
         grid_size_x,
         grid_size_t,
         num_of_step,
         name_of_scheme);
+    timer.stop();
+    std::cout<<timer<<"\n";
+    timer.start();
     simulator.calc();
+    timer.stop();
+    std::cout<<timer<<"\n";
     std::string foldername = "../vlasov_result_sin";    
     simulator.save_result(foldername);
 }

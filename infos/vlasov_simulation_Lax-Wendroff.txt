@@ -1,0 +1,26 @@
+
+    std::string name_of_scheme="Lax-Wendroff";
+    /************initial state of f**************
+     *                                          *
+     *                                          *
+     *                          -> V            *
+     *          ========                        *
+     *                 |H                       *
+     * |-=======--------===============---->x   *
+     * ^        ^       ^              ^        *
+     * 0        x1      x2             length   *
+     *                                          *
+    *********************************************/
+    //初期波形の設定　
+    int length=10000;
+    int x1    =  500;
+    int x2    = 1000;
+    int num_of_step=100000;
+    double H  = 100.;
+    double grid_size_x=0.1;
+    double grid_size_t=0.1;
+    double v          =0.15;
+
+
+
+かかった時間：1.4252s

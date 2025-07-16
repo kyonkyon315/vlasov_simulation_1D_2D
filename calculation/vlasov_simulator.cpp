@@ -1,5 +1,5 @@
 #include "vlasov_simulator.h"
-#include "developer_muscl.h"
+#include "developer_Lax-Wendroff.h"
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -22,8 +22,8 @@ VlasovSimulator::VlasovSimulator(const std::vector<double> &initial_state,
     //num_of_step*num_of_grid_x の二次元配列を作成
     f=std::vector<std::vector<double>>(num_of_step + 1,
                    std::vector<double>(num_of_grid_x,0.));
-    if(type_of_developer=="MUSCL"){
-        developer = new Developer_MUSCL(v,grid_size_x,grid_size_t,num_of_grid_x);
+    if(type_of_developer=="Lax-Wendroff"){
+        developer = new Developer_LaxWendroff(v,grid_size_x,grid_size_t,num_of_grid_x);
     }
     f[0]=initial_state;
 }
