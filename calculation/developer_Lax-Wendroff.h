@@ -1,15 +1,15 @@
-#ifndef DEVELOPER_MUSCL_H
-#define DEVELOPER_MUSCL_H
+#ifndef DEVELOPER_LAXWENDROFF_H
+#define DEVELOPER_LAXWENDROFF_H
 #include "developer.h"
 #include <vector>
 #include <iostream>
 
-class Developer_MUSCL:public Developer{
+class Developer_LaxWendroff:public Developer{
     private:
     const double* roller(const double* const ptr)const;
 
     public:
-    Developer_MUSCL(double v,double grid_size_x,double grid_size_t,int num_of_step):
+    Developer_LaxWendroff(double v,double grid_size_x,double grid_size_t,int num_of_step):
         Developer(v,grid_size_x,grid_size_t,num_of_step)
     {
         std::cout<<courant_value<<"";
