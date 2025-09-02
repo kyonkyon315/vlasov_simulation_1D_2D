@@ -5,18 +5,38 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
+#include <stdexcept>
 
-VlasovSimulator::VlasovSimulator(const std::vector<double> &initial_state,
-        double v,
+int check_shape_of_initial_state(const std::vector<std::vector<std::vector<double>>> &initial_state){
+    if(initial_state.size()<1){
+        throw std::length_error("initial_state の形状が不適切です。\n");
+    }
+    else if(initial_state[0].size()<1){
+        throw std::length_error("initial_state の形状が不適切です。\n");
+    }
+    else if(initial_state[0][0].size()<1){
+        throw std::length_error("initial_state の形状が不適切です。\n");
+    }
+    return initial_state.size();
+}
+
+VlasovSimulator::VlasovSimulator(const std::vector<std::vector<std::vector<double>>> &initial_state,
+        double v_input,
         double grid_size_x,
+        double grid_size_vx,
+        double grid_size_vy,
         double grid_size_t,
         int    num_of_step,
-        const std::string type_of_developer):
-    v(v),
+        const std::string &type_of_developer):
+    v_input(v_input),
     grid_size_x(grid_size_x),
+    grid_size_vx(grid_size_vx),
+    grid_size_vy(grid_size_vy),
     grid_size_t(grid_size_t),
     num_of_step(num_of_step),
-    num_of_grid_x(initial_state.size()),
+    num_of_grid_x(check_shape_of_initial_state(initial_state)),
+    num_of_grid_vx(initial_state[0].size()),
+    num_of_grid_vy(initial_state[0][0].size()),
     type_of_developer(type_of_developer)
 {
     //num_of_step*num_of_grid_x の二次元配列を作成

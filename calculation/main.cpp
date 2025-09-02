@@ -19,49 +19,39 @@ int main(){
      *                                          *
     *********************************************/
     //初期波形の設定　
-    int length=10000;
-    int x1    =  500;
-    int x2    = 1000;
-    int num_of_step=100000;
-    double H  = 100.;
-    double grid_size_x=0.1;
-    double grid_size_t=0.1;
-    double v          =0.15;
+    int num_of_grid_x   =100;
+    int num_of_grid_vx  =101;
+    int num_of_grid_vy  =101;
+    int num_of_step     =10000;
+
+    double grid_size_x  =0.1;
+    double grid_size_vx =0.1;
+    double grid_size_vy =0.1;
+    double grid_size_t  =0.1;
+    double v_input      =0.5;
     Timer timer;
-    timer.start();
-    std::vector<double> initial_state(length);
     
-    for(int i=0;i<x1;i++){
-        initial_state[i]=0.;
-    }
-    for(int i=x1;i<x2;i++){
-        initial_state[i]=H;
-    }
-    for(int i=x2;i<length;i++){
-        initial_state[i]=0.;
-    }
-    
-    for(int i=0;i<length;++i){
-        //initial_state[i]=H*(double)i/(double)length;
-    }
-    for(int i=0;i<length;++i){
-        initial_state[i]=H*std::sin(20.*(double)i/(double)length);
-    }
+    std::vector<std::vector<std::vector<double>>> 
+    initial_state(num_of_grid_x, std::vector<std::vector<double>>(
+                  num_of_grid_vx,std::vector<double>(
+                  num_of_grid_vy,0.                  )));
     //初期波形の設定　終了
     
     VlasovSimulator simulator(initial_state,
-        v,
+        v_input,
         grid_size_x,
+        grid_size_vx,
+        grid_size_vy,
         grid_size_t,
         num_of_step,
         name_of_scheme);
-    timer.stop();
+
     std::cout<<timer<<"\n";
     timer.start();
     simulator.calc();
     timer.stop();
     std::cout<<timer<<"\n";
-    std::string foldername = "../vlasov_result_sin";    
+    std::string foldername = "../vlasov_result";    
     simulator.save_result(foldername);
 }
 
