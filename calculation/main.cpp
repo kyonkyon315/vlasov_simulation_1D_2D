@@ -1,50 +1,64 @@
 #include "vlasov_simulator.h"
 #include "utils/Timer.h"
+#include "schemes/umeda.h"
+#include "functions/gaussian_2D_function.h"
 #include <vector>
 #include <iostream>
 #include <string>
 #include <cmath>
 int main(){
-    std::cout<<"helloworld"<<"\n"<<std::flush;
-    std::string name_of_scheme="Lax-Wendroff";
+    
     /************initial state of f**************
      *                                          *
      *                                          *
-     *                          -> V            *
-     *          ========                        *
-     *                 |H                       *
-     * |-=======--------===============---->x   *
-     * ^        ^       ^              ^        *
-     * 0        x1      x2             length   *
+     * f(x,vx,vy)=delta(vx-v_input)*delta(vy)   *
      *                                          *
     *********************************************/
     //初期波形の設定　
-    int num_of_grid_x   =100;
-    int num_of_grid_vx  =101;
-    int num_of_grid_vy  =101;
-    int num_of_step     =10000;
+    const int num_of_grid_x   =100;
+    const int num_of_grid_vx  =101;
+    const int num_of_grid_vy  =101;
+    const int num_of_step     =10000;
 
-    double grid_size_x  =0.1;
-    double grid_size_vx =0.1;
-    double grid_size_vy =0.1;
-    double grid_size_t  =0.1;
-    double v_input      =0.5;
+    const double grid_size_x  =0.1;
+    const double grid_size_vx =0.1;
+    const double grid_size_vy =0.1;
+    const double grid_size_t  =0.1;
+    const double v_input      =0.5;
     Timer timer;
     
-    std::vector<std::vector<std::vector<double>>> 
-    initial_state(num_of_grid_x, std::vector<std::vector<double>>(
-                  num_of_grid_vx,std::vector<double>(
-                  num_of_grid_vy,0.                  )));
+    using vec1d = std::vector<double>;
+    using vec2d = std::vector<vec1d>;
+    using vec3d = std::vector<vec2d>;
+
+    vec3d initial_state(
+        num_of_grid_x,
+        vec2d(num_of_grid_vx, vec1d(num_of_grid_vy, 0.0))
+    );
+
+    for(int x=0;x<grid_size_x;++x){
+        for(int vx=0;vx<grid_size_vx;++vx){
+            for(int vy=0;vy<grid_size_vy;++vy){
+                initial_state[x][vx][vy] = Gaussian_2D_function::function(vx,vy);
+            }
+        }
+    }
+
     //初期波形の設定　終了
     
-    VlasovSimulator simulator(initial_state,
-        v_input,
+    //スキームは以下から選択
+    using scheme = Scheme_Umeda;
+    //using scheme = Lax_Wendroff;
+    //using scheme = MUSCL;
+    //using scheme = WENO;
+
+    VlasovSimulator<scheme> simulator(
+        initial_state,
         grid_size_x,
         grid_size_vx,
         grid_size_vy,
         grid_size_t,
-        num_of_step,
-        name_of_scheme);
+        num_of_step);
 
     std::cout<<timer<<"\n";
     timer.start();
