@@ -2,11 +2,12 @@
 #define AXIS_H
 #include <stdexcept>
 #include <string>
+#include <cmath>
 using Index = int;
 using Value = double;
 template<bool Periodic,Index Size>
 class Axis{
-    private:
+    public:
     static constexpr Index size     = Size;
     static constexpr bool  periodic = Periodic;
 
@@ -23,7 +24,7 @@ class Axis{
         } else {
             if (id < 0 || id>=size){
                 throw std::overflow_error(
-                std::string(__FILE__) + ":" + std::to_string(__LINE__))
+                std::string(__FILE__) + ":" + std::to_string(__LINE__));
             }
         }
         return start+dx*static_cast<Value>(id);
