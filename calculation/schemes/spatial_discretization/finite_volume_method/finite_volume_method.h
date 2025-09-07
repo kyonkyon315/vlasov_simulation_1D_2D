@@ -3,6 +3,14 @@
 
 template<typename FluxLimiter,typename RiemannSolver>
 class FiniteVolumeMethod{
+    public:
+    FiniteVolumeMethod(const FluxLimiter& flux_limiter,const RiemannSolver& riemann_solver){
+
+    }
+    template<typename DistributionFunction>
+    void differentiate(const DistributionFunction& f,DistributionFunction& result){
+        
+    }
 };
 
 #endif

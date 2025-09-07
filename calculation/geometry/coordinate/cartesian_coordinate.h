@@ -2,13 +2,16 @@
 #define CARTESIAN_COORDINATE_H
 #include <tuple>
 #include <array>
-template<typename... Axes>
-class CartesianCoordinate{
+#include "coordinate.h"
+template<typename Axis_x,typename Axis_y,typename Axis_z>
+class CartesianCoordinate:public Coordinate<Axis_r, Axis_theta, Axis_phi>{
+    using Value = double;
+    using Index = int;
 public:
-    const std::tuple<Axes...> axis_tuple;
-    static constexpr size_t dimension = sizeof...(Axes);
-    CartesianCoordinate(Axes... axes):axis_tuple(axes...){}
-    std::array<size_t,dimension> sizes() const {return {Axes::size...};}
+    const std::tuple<Axis_x,Axis_y,Axis_z> axis_tuple;
+    CartesianCoordinate(const Axis_x& axis_x,const Axis_y& axis_y,const Axis_z& axis_z):
+        Coordinate<Axis_r, Axis_theta, Axis_phi>(axis_x,axis_y,axis_z)
+    {}
 };
 
 #endif// CARTESIAN_COORDINATE_H
